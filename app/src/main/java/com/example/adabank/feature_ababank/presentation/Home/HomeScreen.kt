@@ -4,6 +4,7 @@ package com.example.adabank.feature_ababank.presentation.Home
 
 import android.content.pm.PackageManager
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,7 +31,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -41,7 +41,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -57,7 +56,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.adabank.R
 import com.example.adabank.core.presentation.components.CustomProfileImage
-import com.example.adabank.feature_ababank.data.util.Util.getActivity
+import com.example.adabank.feature_ababank.data.utils.Util.getActivity
 import com.example.adabank.feature_ababank.domain.model.TransactionData
 import com.example.adabank.core.presentation.components.TransactionCategoryItem
 import com.example.adabank.feature_ababank.presentation.navgraph.Route
@@ -71,7 +70,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
 
-    val activity = LocalContext.current.getActivity()
+    val activity = LocalContext.current as AppCompatActivity?
 
     if (activity
             ?.let { ContextCompat.checkSelfPermission(it, android.Manifest.permission.READ_CONTACTS) }
@@ -88,13 +87,18 @@ fun HomeScreen(
         mutableStateOf(false)
     }
 
-    var columnHeightDb = remember {
+    var bottomSheetHeight = remember {
         mutableStateOf(0.dp)
     }
 
     LaunchedEffect(!transferNav.value){
         if(transferNav.value){
-            navController.navigate(Route.Transfer.route)
+            navController.navigate(Route.Transfer.route){
+                popUpTo(Route.Transfer.route){
+                    saveState = true
+                }
+                launchSingleTop = true
+            }
         }
     }
 
@@ -104,9 +108,6 @@ fun HomeScreen(
     Column(
         Modifier
             .fillMaxSize()
-            .onGloballyPositioned {
-                columnHeightDb.value = with(density) { it.size.height.toDp() }
-            }
             .padding(top = 28.dp)
     ) {
         Row(
@@ -138,10 +139,17 @@ fun HomeScreen(
         }
         Spacer(modifier = Modifier.height(33.dp))
         
-        Box(Modifier.fillMaxSize()) {
-            Card(modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
+        Box(
+            Modifier
+                .fillMaxSize()
+                .onGloballyPositioned {
+                    bottomSheetHeight.value = with(density) { it.size.height.toDp() }
+                }
+        ) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = Color.White.copy(alpha = 0.15f)
                 ),
@@ -260,7 +268,7 @@ fun HomeScreen(
 
                         Row(
                             Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
+                            horizontalArrangement = Arrangement.SpaceEvenly,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             repeat(state.sendHistory.size){
@@ -347,10 +355,6 @@ fun HomeScreen(
 
             }
         }
-
-
-
-
     }
 
 }

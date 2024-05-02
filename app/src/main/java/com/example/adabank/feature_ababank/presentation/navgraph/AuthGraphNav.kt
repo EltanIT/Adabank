@@ -6,12 +6,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.adabank.feature_ababank.presentation.Fingerprint.FingerPrintScreen
 import com.example.adabank.feature_ababank.presentation.Login.LoginScreen
+import com.example.adabank.feature_ababank.presentation.PinCodeAuth.PinCodeAuthScreen
 import com.example.adabank.feature_ababank.presentation.SetPin.SetPinScreen
 import com.example.adabank.feature_ababank.presentation.SpashScreen.SplashScreen
 import com.example.adabank.ui.theme.Background2Color
 import com.example.adabank.ui.theme.BackgroundColor
 import com.google.accompanist.systemuicontroller.SystemUiController
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 
 fun NavGraphBuilder.authGraphNav(
@@ -38,6 +38,11 @@ fun NavGraphBuilder.authGraphNav(
         }
         composable(Route.FingerPrint.route){
             FingerPrintScreen(navController = navController)
+        }
+
+
+        composable(Route.PinCodeAuth.route){
+            PinCodeAuthScreen(navController = navController)
         }
     }
 }

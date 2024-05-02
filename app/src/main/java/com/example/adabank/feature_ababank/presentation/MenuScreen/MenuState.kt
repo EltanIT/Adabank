@@ -3,7 +3,9 @@ package com.example.adabank.feature_ababank.presentation.MenuScreen
 import com.example.adabank.R
 
 data class MenuState(
-    val search: String = ""
+    val search: String = "",
+    val filteredShortcutMenu: List<MenuItem> = emptyList(),
+    val filteredOtherMenu: List<MenuItem> = emptyList(),
 ){
 
     val shortcuts = listOf(

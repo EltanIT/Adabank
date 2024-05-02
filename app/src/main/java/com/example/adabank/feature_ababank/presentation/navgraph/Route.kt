@@ -5,6 +5,7 @@ open class Route(val route: String){
     object SplashScreen: Route("SplashScreen")
     object Login: Route("Login")
     object Verification: Route("Verification")
+    object PinCodeAuth: Route("PinCodeAuth")
     object SetPin: Route("SetPin")
     object FingerPrint: Route("FingerPrint")
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.adabank.feature_ababank.data.network.SupabaseInit.client
 import com.example.adabank.feature_ababank.domain.useCases.SplashScreenUseCase
+import com.example.adabank.feature_ababank.domain.useCases.biometric.BiometricUseCase
 import com.example.adabank.feature_ababank.presentation.navgraph.Route
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.jan.supabase.gotrue.SessionStatus
@@ -18,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val splashScreenUseCase: SplashScreenUseCase
+    private val splashScreenUseCase: SplashScreenUseCase,
+    private val biometricUseCase: BiometricUseCase,
 ): ViewModel() {
 
     private val _startGraphDestination = mutableStateOf("")
@@ -40,8 +42,8 @@ class MainActivityViewModel @Inject constructor(
                 while (isChecking){
                     when(client.auth.sessionStatus.value){
                         is SessionStatus.Authenticated ->  {
-                            _startDestination.value = Route.NavigationHome.route
-                            _startGraphDestination.value = Route.AppGraph.route
+                            _startDestination.value = Route.PinCodeAuth.route
+                            _startGraphDestination.value = Route.AuthGraph.route
                             isChecking = false
                         }
                         SessionStatus.LoadingFromStorage -> {
@@ -53,12 +55,11 @@ class MainActivityViewModel @Inject constructor(
                         }
                         is SessionStatus.NotAuthenticated -> {
                             _startDestination.value = Route.Login.route
-                            _startGraphDestination.value = Route.AppGraph.route
+                            _startGraphDestination.value = Route.AuthGraph.route
                             isChecking = false
                         }
                     }
                 }
-
             }else{
                 splashScreenUseCase.saveSplashScreen(false)
                 _startDestination.value = Route.SplashScreen.route

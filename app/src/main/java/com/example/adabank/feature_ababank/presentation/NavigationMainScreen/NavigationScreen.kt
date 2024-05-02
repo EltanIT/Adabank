@@ -92,8 +92,24 @@ fun NavigationScreen(
                                         .clickable {
                                             viewModel.onEvent(NavigationEvent.SelectItem(it))
                                             when(it){
-                                                0 -> navController.navigate(Route.Home.route)
-                                                1 -> {navController.navigate(Route.Graph.route)}
+                                                0 -> navController.navigate(Route.Home.route){
+                                                    navController.graph.startDestinationRoute?.let { route ->
+                                                        popUpTo(route) {
+                                                            saveState = true
+                                                        }
+                                                    }
+                                                    launchSingleTop = true
+                                                    restoreState = true
+                                                }
+                                                1 -> navController.navigate(Route.Graph.route){
+                                                    navController.graph.startDestinationRoute?.let { route ->
+                                                        popUpTo(route) {
+                                                            saveState = true
+                                                        }
+                                                    }
+                                                    launchSingleTop = true
+                                                    restoreState = true
+                                                }
                                             }
 
                                         }
@@ -115,8 +131,24 @@ fun NavigationScreen(
                                         .clickable {
                                             viewModel.onEvent(NavigationEvent.SelectItem(it + 2))
                                             when(it+2){
-                                                2 -> navController.navigate(Route.Wallet.route)
-                                                3 -> navController.navigate(Route.Notification.route)
+                                                2 -> navController.navigate(Route.Wallet.route){
+                                                    navController.graph.startDestinationRoute?.let { route ->
+                                                        popUpTo(route) {
+                                                            saveState = true
+                                                        }
+                                                    }
+                                                    launchSingleTop = true
+                                                    restoreState = true
+                                                }
+                                                3 -> navController.navigate(Route.Notification.route){
+                                                    navController.graph.startDestinationRoute?.let { route ->
+                                                        popUpTo(route) {
+                                                            saveState = true
+                                                        }
+                                                    }
+                                                    launchSingleTop = true
+                                                    restoreState = true
+                                                }
                                             }
 
                                         })

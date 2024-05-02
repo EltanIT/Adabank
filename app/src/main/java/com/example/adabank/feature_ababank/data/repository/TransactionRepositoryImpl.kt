@@ -1,9 +1,8 @@
 package com.example.adabank.feature_ababank.data.repository
 
 import android.util.Log
-import com.example.adabank.feature_ababank.data.TransactionDao
+import com.example.adabank.feature_ababank.data.storage.TransactionDao
 import com.example.adabank.feature_ababank.data.network.SupabaseInit.client
-import com.example.adabank.feature_ababank.domain.model.ContactData
 import com.example.adabank.feature_ababank.domain.model.ReceiptData
 import com.example.adabank.feature_ababank.domain.model.TransactionData
 import com.example.adabank.feature_ababank.domain.repository.TransactionRepository

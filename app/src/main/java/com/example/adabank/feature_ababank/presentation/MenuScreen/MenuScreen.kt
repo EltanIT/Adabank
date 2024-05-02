@@ -71,10 +71,10 @@ fun MenuScreen(
             Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)) {
-            repeat(state.shortcuts.size){
+            repeat(state.filteredShortcutMenu.size){
                 MenuItemCompose(
-                    title = state.shortcuts[it].title,
-                    icon =state.shortcuts[it].icon,
+                    title = state.filteredShortcutMenu[it].title,
+                    icon =state.filteredShortcutMenu[it].icon,
                     modifier = Modifier.clickable {
                         when(it){
                             0 -> {navController.navigate(Route.Transfer.route)}
@@ -110,10 +110,10 @@ fun MenuScreen(
             Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)) {
-            repeat(state.otherMenu.size){
+            repeat(state.filteredOtherMenu.size){
                 MenuItemCompose(
-                    title = state.otherMenu[it].title,
-                    icon =state.otherMenu[it].icon,
+                    title = state.filteredOtherMenu[it].title,
+                    icon =state.filteredOtherMenu[it].icon,
                     modifier = Modifier.clickable {
                         when(it){
                             0 -> {navController.popBackStack()}

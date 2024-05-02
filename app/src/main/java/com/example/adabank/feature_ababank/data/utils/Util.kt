@@ -1,4 +1,4 @@
-package com.example.adabank.feature_ababank.data.util
+package com.example.adabank.feature_ababank.data.utils
 
 import android.content.Context
 import android.content.ContextWrapper

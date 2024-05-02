@@ -3,7 +3,7 @@ package com.example.adabank.feature_ababank.data.repository
 import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.ContactsContract
-import com.example.adabank.feature_ababank.data.ContactDao
+import com.example.adabank.feature_ababank.data.storage.ContactDao
 import com.example.adabank.feature_ababank.domain.model.ContactData
 import com.example.adabank.feature_ababank.domain.repository.ContactsRepository
 import kotlinx.coroutines.flow.Flow

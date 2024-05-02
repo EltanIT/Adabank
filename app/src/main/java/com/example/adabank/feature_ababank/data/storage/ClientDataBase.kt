@@ -1,4 +1,4 @@
-package com.example.adabank.feature_ababank.data
+package com.example.adabank.feature_ababank.data.storage
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

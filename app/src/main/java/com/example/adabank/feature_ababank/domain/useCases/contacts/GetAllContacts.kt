@@ -8,6 +8,7 @@ class GetAllContacts(
 ) {
 
     suspend operator fun invoke(): List<ContactData>{
-        return contactsRepository.getAllContacts()
+        val contacts = contactsRepository.getAllContacts()
+        return contacts.distinctBy { it.number }
     }
 }

@@ -1,6 +1,11 @@
 package com.example.adabank.feature_ababank.presentation.Transfer
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,6 +31,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,6 +46,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
@@ -45,6 +56,7 @@ import com.example.adabank.core.presentation.components.CustomContactItem
 import com.example.adabank.core.presentation.components.CustomRadioButton
 import com.example.adabank.core.presentation.components.CustomTopAppBar
 import com.example.adabank.core.presentation.components.SearchTextField
+import com.example.adabank.feature_ababank.data.utils.Util.getActivity
 import com.example.adabank.feature_ababank.presentation.navgraph.Route
 import com.example.adabank.ui.theme.Background2Color
 import com.example.adabank.ui.theme.BackgroundColor
@@ -58,6 +70,36 @@ fun TransferScreen(
     viewModel: TransferViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
+
+    val activity = LocalContext.current as AppCompatActivity?
+
+
+    var isSelfPermission by remember{
+        mutableStateOf(activity
+            ?.let { ContextCompat.checkSelfPermission(it, Manifest.permission.READ_CONTACTS) }
+                == PackageManager.PERMISSION_GRANTED)
+    }
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { granted ->
+            isSelfPermission = granted
+        }
+    )
+
+
+    LaunchedEffect(key1 = !isSelfPermission) {
+        if (isSelfPermission){
+            viewModel.onEvent(TransferEvent.GetAllContacts)
+        }
+    }
+
+
+    LaunchedEffect(key1 = true) {
+        launcher.launch(Manifest.permission.READ_CONTACTS)
+    }
+
+
 
     Column(
         Modifier

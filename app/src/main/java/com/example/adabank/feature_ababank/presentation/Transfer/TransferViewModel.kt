@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -26,7 +27,6 @@ class TransferViewModel @Inject constructor(
     private var allContacts = arrayListOf<ContactData>()
 
     init {
-        getAllContacts()
         getRecentContacts()
     }
 
@@ -40,15 +40,19 @@ class TransferViewModel @Inject constructor(
                         for (i in 0..3){
                             contactList.add(list[i])
                         }
-                        _state.value = state.value.copy(
-                            recentsContacts = contactList,
-                            selectContact = contactList[0].number
-                        )
+                        withContext(Dispatchers.Main){
+                            _state.value = state.value.copy(
+                                recentsContacts = contactList,
+                                selectContact = contactList[0].number
+                            )
+                        }
                     }else if (list.isNotEmpty()){
-                        _state.value = state.value.copy(
-                            recentsContacts = list,
-                            selectContact = list[0].number
-                        )
+                        withContext(Dispatchers.Main){
+                            _state.value = state.value.copy(
+                                recentsContacts = list,
+                                selectContact = list[0].number
+                            )
+                        }
                     }
                 }.launchIn(viewModelScope)
 
@@ -74,6 +78,10 @@ class TransferViewModel @Inject constructor(
                     selectContact = event.id
                 )
             }
+
+            TransferEvent.GetAllContacts -> {
+                getAllContacts()
+            }
         }
     }
 
@@ -81,9 +89,11 @@ class TransferViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val contacts = contactsUseCase.getAllContacts()
-                _state.value = state.value.copy(
-                    allContacts = contacts,
-                )
+                withContext(Dispatchers.Main){
+                    _state.value = state.value.copy(
+                        allContacts = contacts,
+                    )
+                }
                 allContacts.clear()
                 allContacts.addAll(contacts)
                 Log.i("supabaseClient", allContacts.size.toString())
